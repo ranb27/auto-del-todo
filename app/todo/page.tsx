@@ -61,7 +61,7 @@ function page() {
     fetchFood();
   }, [fruitList, vegetableList]);
 
-  //* handle apending add to fruitList if food_type is fruit else to vegetableList
+  //* handle apending add to fruitList if food_type is fruit else to vegetableList -- timer 5s
   const handleAdd = (food: Food) => {
     const countdownTime = 5; // 5 seconds
     setFoodCountdowns((prevCountdowns) => ({
@@ -86,21 +86,16 @@ function page() {
     setVegetableList(newVegetableList);
   };
 
-  //* countdown timer for auto return with 5s
-  // return food to foodList
+  //* countdown timer for auto return
+  //? return food to foodList
   const handleReturn = (foodName: string) => {
     setFruitList((prevList) => prevList.filter((item) => item !== foodName));
     setVegetableList((prevList) =>
       prevList.filter((item) => item !== foodName)
     );
-
-    const food = foodList.find((item) => item.food_name === foodName);
-    if (food) {
-      setFoodList((prevList) => [...prevList, food]);
-    }
   };
 
-  // effect to countdown timer
+  //? effect to countdown timer
   useEffect(() => {
     const interval = setInterval(() => {
       setFoodCountdowns((prevCountdowns) => {
