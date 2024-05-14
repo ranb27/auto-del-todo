@@ -31,10 +31,8 @@ export default function Card({
               >
                 <li className="flex justify-between gap-2">
                   {item}{" "}
-                  <span className="countdown text-error font-mono font-bold">
-                    <span style={{ "--value": foodCountdowns[item] }}>
-                      {foodCountdowns[item]}
-                    </span>
+                  <span className="text-error">
+                    {foodCountdowns[item] && `(${foodCountdowns[item]})`}
                   </span>
                 </li>
               </button>
