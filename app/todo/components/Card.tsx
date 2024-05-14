@@ -4,9 +4,17 @@ interface CardProps {
   label: string;
   list: string[];
   handleDelete: (food: string, type: string) => void;
+  foodCountdowns: Record<string, number>;
 }
 
-export default function Card({ label, list, handleDelete }: CardProps) {
+export default function Card({
+  label,
+  list,
+  handleDelete,
+  foodCountdowns,
+}: CardProps) {
+  console.log("foodCountdowns", foodCountdowns);
+
   return (
     <div>
       <div className="card bg-base-100 shadow-xl">
@@ -21,7 +29,12 @@ export default function Card({ label, list, handleDelete }: CardProps) {
                 className="btn btn-success text-success-content"
                 onClick={() => handleDelete(item, label)}
               >
-                <li className="flex justify-between">{item}</li>
+                <li className="flex justify-between gap-2">
+                  {item}{" "}
+                  <span className="text-error">
+                    {foodCountdowns[item] && `(${foodCountdowns[item]})`}
+                  </span>
+                </li>
               </button>
             ))}
           </ul>

@@ -16,12 +16,18 @@ function page() {
     id: number;
     food_name: string;
     food_type: string;
+    foodCountdowns: number;
   }
 
   //! State
   const [foodList, setFoodList] = useState<Food[]>([]);
   const [fruitList, setFruitList] = useState<string[]>([]);
   const [vegetableList, setVegetableList] = useState<string[]>([]);
+
+  // Countdowns for each food item
+  const [foodCountdowns, setFoodCountdowns] = useState<Record<string, number>>(
+    {}
+  );
 
   // loading
   const [loading, setLoading] = useState<boolean>(false);
@@ -57,17 +63,20 @@ function page() {
 
   //* handle apending add to fruitList if food_type is fruit else to vegetableList
   const handleAdd = (food: Food) => {
+    const countdownTime = 5; // 5 seconds
+    setFoodCountdowns((prevCountdowns) => ({
+      ...prevCountdowns,
+      [food.food_name]: countdownTime,
+    }));
+
     if (food.food_type === "Fruit") {
-      setFruitList([...fruitList, food.food_name]);
+      setFruitList((prevList) => [...prevList, food.food_name]);
     } else if (food.food_type === "Vegetable") {
-      setVegetableList([...vegetableList, food.food_name]);
+      setVegetableList((prevList) => [...prevList, food.food_name]);
     } else {
       console.error("Invalid food type");
     }
   };
-
-  // console.log("fruitList", fruitList);
-  // console.log("vegetableList", vegetableList);
 
   //* handle slice delete from fruitList & vegetableList and append to foodList
   const handleDelete = (food: string, type: string) => {
@@ -79,6 +88,41 @@ function page() {
       setVegetableList(newVegetableList);
     }
   };
+
+  //* countdown timer for auto return with 5s
+  // return food to foodList
+  const handleReturn = (foodName: string) => {
+    setFruitList((prevList) => prevList.filter((item) => item !== foodName));
+    setVegetableList((prevList) =>
+      prevList.filter((item) => item !== foodName)
+    );
+
+    const food = foodList.find((item) => item.food_name === foodName);
+    if (food) {
+      setFoodList((prevList) => [...prevList, food]);
+    }
+  };
+
+  // effect to countdown timer
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setFoodCountdowns((prevCountdowns) => {
+        const newCountdowns = { ...prevCountdowns };
+
+        Object.keys(newCountdowns).forEach((foodName) => {
+          newCountdowns[foodName] -= 1;
+          if (newCountdowns[foodName] <= 0) {
+            handleReturn(foodName);
+            delete newCountdowns[foodName];
+          }
+        });
+
+        return newCountdowns;
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="h-screen flex justify-center items-center">
@@ -105,6 +149,7 @@ function page() {
                 label="Fruit"
                 list={fruitList}
                 handleDelete={handleDelete}
+                foodCountdowns={foodCountdowns}
               />
             </div>
             <div className="lg:col-span-3">
@@ -112,6 +157,7 @@ function page() {
                 label="Vegetable"
                 list={vegetableList}
                 handleDelete={handleDelete}
+                foodCountdowns={foodCountdowns}
               />
             </div>
           </div>
