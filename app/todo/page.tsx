@@ -35,7 +35,7 @@ function page() {
   //! Fetch Data from API supabase Schema public Table food_master
   useEffect(() => {
     const fetchFood = async () => {
-      setLoading(true);
+      // setLoading(true);
       try {
         const { data: allFood, error } = await supabase
           .from("food_master")
@@ -52,7 +52,7 @@ function page() {
         );
 
         await setFoodList(filteredFood);
-        await setLoading(false);
+        // await setLoading(false);
       } catch (error) {
         console.error("Error fetching data from Supabase:", error);
       }
@@ -80,13 +80,10 @@ function page() {
 
   //* handle slice delete from fruitList & vegetableList and append to foodList
   const handleDelete = (food: string, type: string) => {
-    if (type === "Fruit") {
-      const newFruitList = fruitList.filter((item) => item !== food);
-      setFruitList(newFruitList);
-    } else {
-      const newVegetableList = vegetableList.filter((item) => item !== food);
-      setVegetableList(newVegetableList);
-    }
+    const newFruitList = fruitList.filter((item) => item !== food);
+    const newVegetableList = vegetableList.filter((item) => item !== food);
+    setFruitList(newFruitList);
+    setVegetableList(newVegetableList);
   };
 
   //* countdown timer for auto return with 5s
