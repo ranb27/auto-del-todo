@@ -13,8 +13,6 @@ export default function Card({
   handleDelete,
   foodCountdowns,
 }: CardProps) {
-  console.log("foodCountdowns", foodCountdowns);
-
   return (
     <div>
       <div className="card bg-base-100 shadow-xl">

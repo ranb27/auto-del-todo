@@ -74,24 +74,15 @@ function page() {
     }
   };
 
-  //* handle slice delete from fruitList & vegetableList and append to foodList
-  const handleDelete = (food: string, type: string) => {
-    const newFruitList = fruitList.filter((item) => item !== food);
-    const newVegetableList = vegetableList.filter((item) => item !== food);
-    setFruitList(newFruitList);
-    setVegetableList(newVegetableList);
-  };
-
-  //* countdown timer for auto return
-  //? return food to foodList
-  const handleReturn = (foodName: string) => {
+  //* handle delete from fruitList & vegetableList
+  const handleDelete = (foodName: string) => {
     setFruitList((prevList) => prevList.filter((item) => item !== foodName));
     setVegetableList((prevList) =>
       prevList.filter((item) => item !== foodName)
     );
   };
 
-  //? effect to countdown timer
+  //* effect countdown timer for auto return -1s with interval 1000ms
   useEffect(() => {
     const interval = setInterval(() => {
       setFoodCountdowns((prevCountdowns) => {
@@ -100,7 +91,7 @@ function page() {
         Object.keys(newCountdowns).forEach((foodName) => {
           newCountdowns[foodName] -= 1;
           if (newCountdowns[foodName] <= 0) {
-            handleReturn(foodName);
+            handleDelete(foodName);
             delete newCountdowns[foodName];
           }
         });
