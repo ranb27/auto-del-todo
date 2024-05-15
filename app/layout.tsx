@@ -35,7 +35,7 @@ export default function RootLayout({
         />
       </head>
       <body className="bg-base-300 text-base-content duration-300">
-        <main className="min-h-screen flex flex-col items-center">
+        <main className="min-h-screen h-full flex flex-col items-center">
           <div className="absolute right-4 top-4">
             <label className="cursor-pointer grid place-items-center">
               <input

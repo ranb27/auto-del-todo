@@ -29,13 +29,9 @@ function page() {
     {}
   );
 
-  // loading
-  const [loading, setLoading] = useState<boolean>(false);
-
   //! Fetch Data from API supabase Schema public Table food_master
   useEffect(() => {
     const fetchFood = async () => {
-      // setLoading(true);
       try {
         const { data: allFood, error } = await supabase
           .from("food_master")
@@ -51,8 +47,7 @@ function page() {
             !vegetableList.includes(item.food_name)
         );
 
-        await setFoodList(filteredFood);
-        // await setLoading(false);
+        setFoodList(filteredFood);
       } catch (error) {
         console.error("Error fetching data from Supabase:", error);
       }
@@ -61,6 +56,7 @@ function page() {
     fetchFood();
   }, [fruitList, vegetableList]);
 
+  //! Function
   //* handle apending add to fruitList if food_type is fruit else to vegetableList -- timer 5s
   const handleAdd = (food: Food) => {
     const countdownTime = 5; // 5 seconds
@@ -117,44 +113,40 @@ function page() {
   }, []);
 
   return (
-    <div className="h-screen flex justify-center items-center">
-      {loading ? (
-        <span className="loading loading-spinner text-primary w-32"></span>
-      ) : (
-        <div className="grid grid-cols-1">
-          <div className="grid lg:grid-cols-7 sm:grid-cols-3 grid-cols-1 gap-4">
-            <div className="grid col-span-1 gap-4 my-auto mx-auto">
-              {foodList.map((food: Food) => (
-                <div className="grid grid-cols-1" key={food.id}>
-                  <button
-                    onClick={() => handleAdd(food)}
-                    className="btn btn-primary"
-                  >
-                    {food.food_name}
-                  </button>
-                </div>
-              ))}
-            </div>
+    <div className="min-h-screen h-full flex justify-center items-center">
+      <div className="grid grid-cols-1">
+        <div className="grid lg:grid-cols-7 sm:grid-cols-3 grid-cols-1 gap-4">
+          <div className="grid col-span-1 gap-2 my-auto mx-auto">
+            {foodList.map((food: Food) => (
+              <div className="grid grid-cols-1" key={food.id}>
+                <button
+                  onClick={() => handleAdd(food)}
+                  className="btn btn-primary"
+                >
+                  {food.food_name}
+                </button>
+              </div>
+            ))}
+          </div>
 
-            <div className="lg:col-span-3">
-              <Card
-                label="Fruit"
-                list={fruitList}
-                handleDelete={handleDelete}
-                foodCountdowns={foodCountdowns}
-              />
-            </div>
-            <div className="lg:col-span-3">
-              <Card
-                label="Vegetable"
-                list={vegetableList}
-                handleDelete={handleDelete}
-                foodCountdowns={foodCountdowns}
-              />
-            </div>
+          <div className="lg:col-span-3">
+            <Card
+              label="Fruit"
+              list={fruitList}
+              handleDelete={handleDelete}
+              foodCountdowns={foodCountdowns}
+            />
+          </div>
+          <div className="lg:col-span-3">
+            <Card
+              label="Vegetable"
+              list={vegetableList}
+              handleDelete={handleDelete}
+              foodCountdowns={foodCountdowns}
+            />
           </div>
         </div>
-      )}
+      </div>
     </div>
   );
 }
